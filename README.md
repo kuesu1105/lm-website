@@ -1,6 +1,6 @@
 # Lüdi Motos AG – Website
 
-Ausführliche Anleitung (Farben, Inhalte, Winteraktion, Formulare): https://claude.ai/artifact/6Zjxza1xrJSbzVEbLz8p4Q
+Ausführliche Anleitung (Farben, Inhalte, Winteraktion, Formulare): [ANLEITUNG.md](ANLEITUNG.md)
 
 Statische, responsive Website (HTML/CSS/JS, kein Framework). Einfach `index.html` im Browser öffnen
 oder den Ordner auf einen beliebigen Webserver hochladen.
