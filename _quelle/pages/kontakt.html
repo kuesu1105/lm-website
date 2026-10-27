@@ -1,0 +1,118 @@
+    <section class="page-hero">
+      <div class="container split">
+        <div>
+          <nav class="breadcrumb" aria-label="Brotkrumen"><a href="index.html">Home</a><span>/</span><span>Kontakt</span></nav>
+          <span class="eyebrow">Kontakt &amp; Öffnungszeiten</span>
+          <h1>Wir sind<br><span class="text-brand">für dich da.</span></h1>
+          <p class="lead">Ruf an, schreib uns oder komm direkt vorbei. Wir beraten dich gerne persönlich.</p>
+        </div>
+        <div class="page-hero__img reveal"><img src="img/port_001.jpg" alt="Lüdi Motos AG, Goldbachstrasse 8, Schafhausen i.E." width="640" height="480"></div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-bottom:0">
+      <div class="container">
+        <div class="grid grid-3 reveal">
+          <a class="card" href="tel:+41344611410" style="color:inherit"><div class="card__icon">{{icon:phone}}</div><h3>Anrufen</h3><p>Telefon 034 461 14 10<br>Telefax 034 461 34 09</p></a>
+          <a class="card" href="mailto:info@luedimotos.ch" style="color:inherit"><div class="card__icon">{{icon:mail}}</div><h3>Schreiben</h3><p>info@luedimotos.ch</p></a>
+          <a class="card" href="https://www.google.com/maps/dir/?api=1&amp;destination=Goldbachstrasse+8,+3415+Schafhausen+im+Emmental" target="_blank" rel="noopener" style="color:inherit"><div class="card__icon">{{icon:map}}</div><h3>Route planen</h3><p>Goldbachstrasse 8<br>3415 Schafhausen i.E.</p></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="formular">
+      <div class="container split" style="align-items:start">
+        <div class="reveal">
+          <span class="eyebrow">Kontaktformular</span>
+          <h2>Schreib uns</h2>
+          <p class="lead">Fragen zu einem Fahrzeug, Wunsch nach einer Probefahrt, einem Mietfahrzeug oder einer Offerte? Wir melden uns so rasch wie möglich bei dir.</p>
+
+          <div class="info-card" style="margin-top:28px">
+            <h3>{{icon:clock}} Öffnungszeiten</h3>
+            <p class="status-pill" data-open-status style="margin:0 0 6px"><span class="status-dot"></span><span class="status-text"></span></p>
+            {{hours}}
+          </div>
+
+          <div class="notice" style="margin-top:20px">{{icon:wrench}}<div>Für Werkstattarbeiten nutzt du am besten die <a href="werkstatt.html#termin"><strong>Online-Serviceanmeldung</strong></a>, für die Winteraktion die <a href="winteraktion.html#anmeldung"><strong>Winter-Anmeldung</strong></a>.</div></div>
+        </div>
+
+        <div class="form-wrap reveal" data-delay="1">
+          <form data-form data-subject="Kontaktanfrage über luedimotos.ch" novalidate>
+            <div class="form-grid">
+              <div class="field full">
+                <label for="k-betreff">Anliegen <span class="req">*</span></label>
+                <select id="k-betreff" name="betreff" required>
+                  <option value="">Bitte wählen</option>
+                  <option value="probefahrt">Probefahrt</option>
+                  <option value="offerte">Offerte Neufahrzeug</option>
+                  <option value="occasion">Frage zu einer Occasion</option>
+                  <option value="miete">Mietmotorrad / Mietroller</option>
+                  <option value="zubehoer">Zubehör</option>
+                  <option value="oldtimer">Oldtimer</option>
+                  <option value="ueberwinterung">Überwinterungsplatz</option>
+                  <option value="allgemein">Allgemeine Frage</option>
+                </select>
+                <span class="field__error">Bitte wähle dein Anliegen.</span>
+              </div>
+              <div class="field">
+                <label for="k-vorname">Vorname <span class="req">*</span></label>
+                <input id="k-vorname" name="vorname" autocomplete="given-name" required>
+                <span class="field__error">Bitte gib deinen Vornamen an.</span>
+              </div>
+              <div class="field">
+                <label for="k-nachname">Nachname <span class="req">*</span></label>
+                <input id="k-nachname" name="nachname" autocomplete="family-name" required>
+                <span class="field__error">Bitte gib deinen Nachnamen an.</span>
+              </div>
+              <div class="field">
+                <label for="k-mail">E-Mail <span class="req">*</span></label>
+                <input id="k-mail" name="email" type="email" autocomplete="email" required>
+                <span class="field__error">Bitte gib eine gültige E-Mail-Adresse an.</span>
+              </div>
+              <div class="field">
+                <label for="k-tel">Telefon</label>
+                <input id="k-tel" name="telefon" type="tel" autocomplete="tel" pattern="[0-9+ ()\-]{9,}">
+                <span class="field__error">Bitte gib eine gültige Telefonnummer an.</span>
+              </div>
+              <div class="field full">
+                <label for="k-nachricht">Nachricht <span class="req">*</span></label>
+                <textarea id="k-nachricht" name="nachricht" required placeholder="Wie können wir dir helfen?"></textarea>
+                <span class="field__error">Bitte schreib uns eine Nachricht.</span>
+              </div>
+              <label class="check full"><input type="checkbox" name="datenschutz" data-skip required> <span>Ich bin einverstanden, dass meine Angaben zur Bearbeitung der Anfrage verwendet werden (<a href="impressum.html#datenschutz">Datenschutz</a>). <span class="req">*</span></span></label>
+            </div>
+            <div class="form-nav">
+              <button type="submit" class="btn btn--block">Nachricht senden {{icon:send}}</button>
+            </div>
+          </form>
+          <div class="form-success" data-success role="status">
+            <div class="form-success__icon">{{icon:tick}}</div>
+            <h3>Vielen Dank<span data-success-name></span>!</h3>
+            <p>Deine Nachricht ist unterwegs. Wir melden uns so rasch wie möglich bei dir.</p>
+            <button type="button" class="btn btn--ghost" data-reset>Neue Nachricht</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--white" id="karte">
+      <div class="container split" style="align-items:start">
+        <div class="reveal">
+          <span class="eyebrow">Anfahrt</span>
+          <h2>So findest du uns</h2>
+          <p class="lead">An der Verbindungsstrasse Lützelflüh–Schafhausen, knapp 100 m vom Bahnhof Schafhausen entfernt.</p>
+          <ul class="checklist">
+            <li>{{icon:pin}}<span>Von der Hauptachse Thun–Burgdorf beim <strong>Landgasthof zum Rössli</strong> Richtung Bahnhof abbiegen und noch ca. 60 m weiterfahren.</span></li>
+            <li>{{icon:parking}}<span>Genügend Kundenparkplätze vorhanden.</span></li>
+          </ul>
+        </div>
+        <div class="map reveal" data-delay="1" data-src="https://maps.google.com/maps?q=Goldbachstrasse%208%2C%203415%20Schafhausen%20im%20Emmental&amp;z=15&amp;output=embed">
+          <div class="map__consent">
+            {{icon:pin}}
+            <h3>Karte anzeigen</h3>
+            <p>Beim Laden der Karte werden Daten an Google übermittelt. Mehr dazu in unserer <a href="impressum.html#datenschutz">Datenschutzerklärung</a>.</p>
+            <button class="btn" type="button" data-map-load>Karte laden</button>
+          </div>
+        </div>
+      </div>
+    </section>
