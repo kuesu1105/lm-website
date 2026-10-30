@@ -306,7 +306,9 @@
         value = checked.map((c) => c.dataset.value || c.value).join(", ");
         if (el.type === "checkbox" && $$(`[name="${el.name}"]`, form).length === 1) value = el.checked ? "Ja" : "Nein";
       } else {
-        value = el.type === "date" ? fmtDate(el.value) : el.value.trim();
+        value = el.type === "date" ? fmtDate(el.value)
+          : el.tagName === "SELECT" && el.value ? el.selectedOptions[0].textContent.trim()
+          : el.value.trim();
         seen.add(el.name);
       }
       if (value) rows.push([label, value]);
@@ -327,8 +329,39 @@
     box.replaceChildren(dl);
   }
 
+  function showError(form, message, mailto) {
+    let box = $(".form-error", form);
+    if (!box) {
+      box = document.createElement("div");
+      box.className = "form-error";
+      box.setAttribute("role", "alert");
+      $(".form-nav", form).before(box);
+    }
+    const text = document.createElement("p");
+    text.textContent = (message || "Das Senden hat leider nicht geklappt.") + " Du erreichst uns auch per Telefon 034 461 14 10 oder per E-Mail.";
+    const link = document.createElement("a");
+    link.href = mailto;
+    link.textContent = "Angaben per E-Mail senden";
+    box.replaceChildren(text, link);
+    box.hidden = false;
+    box.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+  }
+
+  function hideError(form) {
+    const box = $(".form-error", form);
+    if (box) box.hidden = true;
+  }
+
   function initForms() {
     $$("form[data-form]").forEach((form) => {
+      // Ladezeitpunkt und unsichtbares Feld als Schutz vor Spam-Bots (geprüft in send.php)
+      form.dataset.loadedAt = Date.now();
+      const trap = document.createElement("div");
+      trap.className = "hp";
+      trap.setAttribute("aria-hidden", "true");
+      trap.innerHTML = '<label>Bitte leer lassen <input type="text" name="_hp" tabindex="-1" autocomplete="off" data-skip></label>';
+      form.appendChild(trap);
+
       const steps = $$(".form-step", form);
       const progress = $$(".form-progress__step", form);
       const prev = $("[data-prev]", form);
@@ -410,18 +443,31 @@
         submit.dataset.text = submit.innerHTML;
         submit.textContent = "Wird gesendet …";
 
-        let sent = false;
-        if (endpoint) {
+        const to = form.dataset.mailto || "info@luedimotos.ch";
+        const mailto = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(rows.map(([k, v]) => `${k}: ${v}`).join("\n") + "\n\n— gesendet über luedimotos.ch")}`;
+        hideError(form);
+
+        if (endpoint && location.protocol !== "file:") {
+          // Versand über send.php auf dem Webserver
+          const data = new FormData(form);
+          data.set("_form", form.dataset.formId || "");
+          data.set("_rows", JSON.stringify(rows));
+          data.set("_t", String(form.dataset.loadedAt));
+          let result = { ok: false, error: "" };
           try {
-            const res = await fetch(endpoint, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
-            sent = res.ok;
-          } catch (_) { sent = false; }
-        }
-        if (!sent) {
-          // Fallback: E-Mail-Programm mit vorausgefüllter Nachricht öffnen
-          const body = rows.map(([k, v]) => `${k}: ${v}`).join("\n");
-          const to = form.dataset.mailto || "info@luedimotos.ch";
-          window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body + "\n\n— gesendet über luedimotos.ch")}`;
+            const res = await fetch(endpoint, { method: "POST", body: data, headers: { Accept: "application/json" } });
+            result = await res.json().catch(() => ({ ok: false, error: "" }));
+            if (!res.ok) result.ok = false;
+          } catch (_) { /* Netzwerkfehler: Meldung unten */ }
+          if (!result.ok) {
+            showError(form, result.error, mailto);
+            submit.disabled = false;
+            submit.innerHTML = submit.dataset.text;
+            return;
+          }
+        } else {
+          // Ohne Webserver (Datei lokal geöffnet): E-Mail-Programm mit vorausgefüllter Nachricht öffnen
+          window.location.href = mailto;
         }
 
         const success = $("[data-success]", form.parentElement);
@@ -439,6 +485,7 @@
 
       $$("[data-reset]", form.parentElement).forEach((btn) => btn.addEventListener("click", () => {
         form.reset();
+        hideError(form);
         form.hidden = false;
         $("[data-success]", form.parentElement).classList.remove("is-visible");
         $$(".date-info", form).forEach((i) => (i.textContent = ""));

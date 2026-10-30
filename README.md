@@ -26,9 +26,9 @@ Texte, Fotos, Logo, Öffnungszeiten und Partner-Links stammen von luedimotos.ch.
 - **Neue Modelle:** Bild nach `img/` legen und eine Karte in `fahrzeuge.html` bzw. `index.html` kopieren.
 
 ## Formulare versenden
-Ohne Server öffnen die Formulare das E-Mail-Programm mit einer vorausgefüllten Nachricht an
-info@luedimotos.ch. Für den Direktversand einen Formular-Dienst (z. B. Formspree) oder ein Server-Script
-einrichten und dessen URL als `data-endpoint="…"` beim `<form data-form>` eintragen.
+Die drei Formulare senden an `send.php` (PHP, Funktion `mail()`), das die Angaben als E-Mail an
+info@luedimotos.ch schickt. Einstellungen stehen oben in `send.php`. Scheitert der Versand, bietet das
+Formular einen Link ins E-Mail-Programm an. Details: [ANLEITUNG.md](ANLEITUNG.md), Abschnitt Formulare.
 
 ## Hinweise
 - Die Fahrzeugangebote werden wie bisher über das Skript von motorradhandel.ch geladen (Händler 706).

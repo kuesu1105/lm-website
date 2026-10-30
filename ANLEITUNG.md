@@ -16,6 +16,7 @@ Die Webseite besteht aus einfachen HTML-, CSS- und JavaScript-Dateien. Sie brauc
 | `js/main.js` | Interaktionen: Menü, Formulare, Filter, Countdown, Öffnungsstatus, Fahrzeugangebote | Öffnungszeiten für den Live-Status, Formularversand, Inserate-Kategorien |
 | `img/` | Logo, Favicon, Fotos, Fahrzeugbilder, Suzuki- und SYM-Logo | Bilder austauschen oder ergänzen |
 | `index.html`, `werkstatt.html`, … | Fertige Seiten, werden erzeugt | Nicht direkt bearbeiten, nur hochladen |
+| `send.php` | Formularversand per E-Mail an info@luedimotos.ch | Empfänger, Absender, Spam-Schutz |
 | `README.md` | Kurzanleitung für Entwickler | – |
 | `ANLEITUNG.md` | Diese Anleitung | – |
 
@@ -38,7 +39,7 @@ Jede Änderung läuft in vier Schritten: Vorlage bearbeiten, Seiten neu erzeugen
 2. **Seiten erzeugen:** im Hauptordner des Repositorys ein Terminal öffnen und ausführen: `python3 _quelle/build.py .`  
    Unter Windows heisst der Befehl oft `py _quelle/build.py .` Das Skript meldet jede erzeugte Seite mit «built …».
 3. **Lokal prüfen:** `index.html` im Browser öffnen und die geänderte Seite anschauen. Bei Bildern oder Skripten hilft ein kleiner lokaler Server: `python3 -m http.server`, dann `http://localhost:8000` aufrufen.
-4. **Hochladen:** die geänderten Dateien per FTP oder über das Kundenportal des Hosters (Call-Up) auf den Webserver kopieren. Hochladen musst du nur die fertigen Seiten, `css/`, `js/` und `img/`. Den Ordner `_quelle/`, `README.md` und `ANLEITUNG.md` braucht der Server nicht.
+4. **Hochladen:** die geänderten Dateien per FTP oder über das Kundenportal des Hosters (Call-Up) auf den Webserver kopieren. Hochladen musst du nur die fertigen Seiten, `send.php`, `css/`, `js/` und `img/`. Den Ordner `_quelle/`, `README.md` und `ANLEITUNG.md` braucht der Server nicht.
 
 Meldet das Skript `unresolved placeholders`, steht in einer Vorlage ein Platzhalter wie `{{icon:…}}` mit einem Namen, den es nicht gibt. Die verfügbaren Icon-Namen stehen oben in `_quelle/build.py` unter `ICONS`, z. B. `phone`, `mail`, `wrench`, `tire`, `snow`, `heart`.
 
@@ -122,16 +123,24 @@ Ausserhalb der Saison kannst du die Aktion im Menü ausblenden: in `_quelle/buil
 
 Die Webseite hat drei Formulare: Serviceanmeldung (`werkstatt.html`), Anmeldung Winteraktion (`winteraktion.html`) und Kontakt (`kontakt.html`). Alle prüfen die Eingaben selbst und zeigen am Ende eine Zusammenfassung. Die Datumsprüfung der Serviceanmeldung lässt Montag, Sonntag und vergangene Tage nicht zu.
 
-**Versand heute:** Beim Absenden öffnet sich das E-Mail-Programm der Besucherin oder des Besuchers mit einer fertig ausgefüllten Nachricht an info@luedimotos.ch. Wer kein E-Mail-Programm eingerichtet hat, kann so nicht senden.
+**Versand:** Die Formulare schicken ihre Angaben an das Skript `send.php` auf dem Webserver. Es versendet sie als E-Mail an info@luedimotos.ch. Betreff: Formular und Name, z. B. «Serviceanmeldung – Anna Muster». Mit «Antworten» geht die Antwort direkt an die Person, die das Formular ausgefüllt hat.
 
-**Versand ohne E-Mail-Programm einrichten (empfohlen):**
+**Einstellungen** stehen oben in `send.php`:
 
-1. Bei einem Formular-Dienst ein Konto eröffnen, z. B. Formspree, oder beim Hoster (Call-Up) nach einem Formular-Skript fragen. Du erhältst eine Adresse, z. B. `https://formspree.io/f/abcd1234`.
-2. In den Vorlagen der drei Formulare beim Tag `<form data-form …>` ergänzen: `data-endpoint="https://formspree.io/f/abcd1234"`.
-3. Seiten neu erzeugen und hochladen. Die Anfragen kommen dann direkt per E-Mail an. Klappt der Versand nicht, fällt die Seite automatisch auf das E-Mail-Programm zurück.
-4. Den Dienst in der Datenschutzerklärung (`pages/impressum.html`, Abschnitt «Externe Dienste») erwähnen.
+| Einstellung | Wert | Bedeutung |
+| --- | --- | --- |
+| `MAIL_TO` | info@luedimotos.ch | Empfänger aller Formulare |
+| `MAIL_FROM` | webseite@luedimotos.ch | Absender. Muss eine Adresse der Domain luedimotos.ch sein, sonst landen die Mails im Spam. Ein echtes Postfach ist nicht nötig |
+| `FORMS` | service, winter, kontakt | Betreff je Formular |
+| `MAX_PER_HOUR` | 10 | Höchstens so viele Anfragen pro Stunde und Absender |
 
-**Weitere Einstellungen am `<form>`-Tag:** `data-subject="…"` = Betreff der E-Mail. `data-mailto="…"` = andere Empfängeradresse (ohne Angabe: info@luedimotos.ch).
+**Schutz vor Spam:** Ein unsichtbares Feld, das nur Bots ausfüllen, und eine Mindestzeit von 3 Sekunden zwischen Laden der Seite und Absenden. Zusätzlich gilt das Limit pro Stunde.
+
+**Voraussetzungen beim Hoster:** PHP (bei Call-Up üblich) und die PHP-Funktion `mail()`. `send.php` muss im selben Ordner liegen wie die Seiten. Nach dem ersten Hochladen alle drei Formulare einmal testen und prüfen, ob die Mails ankommen (auch im Spam-Ordner nachsehen). Kommt nichts an, bei Call-Up nachfragen, ob `mail()` aktiv ist oder ein SMTP-Versand nötig ist.
+
+**Wenn der Versand scheitert,** zeigt das Formular eine rote Meldung mit Telefonnummer und dem Link «Angaben per E-Mail senden». Dieser öffnet das E-Mail-Programm mit allen Angaben. Öffnest du die Seite lokal als Datei (ohne Webserver), wird immer das E-Mail-Programm verwendet.
+
+**Einstellungen am `<form>`-Tag:** `data-endpoint="send.php"` = Versand über das Skript. `data-form-id="…"` = welches Formular (muss in `FORMS` in `send.php` stehen). `data-subject="…"` und `data-mailto="…"` = Betreff und Empfänger für den Notfall-Link ins E-Mail-Programm.
 
 **Felder anpassen:**
 
@@ -171,7 +180,7 @@ Das Skript von motorradhandel.ch zeigt pro Seite nur eine Liste. Die Reiter lade
 - [ ] Geänderte Seite im Browser angeschaut, auch in schmaler Fensterbreite (Handy-Ansicht)
 - [ ] Bei neuen Bildern: Datei liegt in `img/`, Name im `src` stimmt genau (Gross-/Kleinschreibung beachten)
 - [ ] Bei geänderten Öffnungszeiten: `build.py` **und** `js/main.js` angepasst
-- [ ] Ein Formular einmal testweise ausgefüllt
+- [ ] Ein Formular einmal testweise ausgefüllt und die Mail in info@luedimotos.ch erhalten
 - [ ] Änderungen committet und auf GitHub gepusht
 - [ ] Geänderte Dateien auf den Webserver hochgeladen; danach im Browser neu laden (Ctrl+F5 bzw. Cmd+Shift+R), damit keine alte Version angezeigt wird
 

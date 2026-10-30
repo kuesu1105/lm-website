@@ -659,3 +659,9 @@ p { margin: 0 0 1em; }
 .legal p, .legal li { color: var(--muted); }
 
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+/* Formularversand: Fehlermeldung und Spam-Falle */
+.form-error { margin-top: 24px; padding: 16px 20px; border-radius: var(--radius); background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; font-size: .95rem; }
+.form-error p { margin: 0 0 8px; }
+.form-error a { font-weight: 600; color: #991b1b; text-decoration: underline; }
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
