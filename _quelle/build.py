@@ -86,6 +86,8 @@ HOURS_LIST = """<ul class="hours">
 
 LOGO = '<img src="img/logo.png" alt="Lüdi Motos" width="958" height="104">'
 INSTAGRAM = "https://www.instagram.com/ludimotosag/"
+# Echte Adresse der Webseite (für den canonical-Link, der Suchmaschinen auf das Original verweist)
+SITE_URL = "https://www.luedimotos.ch/"
 
 
 def icon(name):
@@ -116,6 +118,16 @@ def layout(fname, title, desc, body):
   <meta property="og:description" content="{desc}">
   <meta property="og:type" content="website">
   <meta property="og:image" content="img/winteraktion.jpg">
+  <link rel="canonical" href="{SITE_URL}{"" if fname == "index.html" else fname}">
+  <script>
+    // Testversion auf GitHub Pages: nicht in Suchmaschinen aufnehmen
+    if (/\\.github\\.io$/.test(location.hostname)) {{
+      var robots = document.createElement("meta");
+      robots.name = "robots";
+      robots.content = "noindex, nofollow";
+      document.head.appendChild(robots);
+    }}
+  </script>
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

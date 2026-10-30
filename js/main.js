@@ -7,6 +7,8 @@
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Testversion auf GitHub Pages: Hinweisbalken, Formulare werden nicht verschickt
+  const IS_TEST_HOST = /\.github\.io$/.test(location.hostname);
 
   /* ---------- Öffnungszeiten (0 = Sonntag) ---------- */
   const HOURS = {
@@ -447,7 +449,9 @@
         const mailto = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(rows.map(([k, v]) => `${k}: ${v}`).join("\n") + "\n\n— gesendet über luedimotos.ch")}`;
         hideError(form);
 
-        if (endpoint && location.protocol !== "file:") {
+        if (IS_TEST_HOST) {
+          // Testversion: nichts verschicken, nur die Bestätigung zeigen
+        } else if (endpoint && location.protocol !== "file:") {
           // Versand über send.php auf dem Webserver
           const data = new FormData(form);
           data.set("_form", form.dataset.formId || "");
@@ -475,6 +479,12 @@
           const name = form.querySelector("[name=vorname]")?.value || "";
           const nameEl = $("[data-success-name]", success);
           if (nameEl) nameEl.textContent = name ? `, ${name}` : "";
+          if (IS_TEST_HOST && !$(".form-success__test", success)) {
+            const note = document.createElement("p");
+            note.className = "form-success__test";
+            note.textContent = "Testversion: Diese Angaben wurden nicht verschickt.";
+            $("h3", success).after(note);
+          }
           form.hidden = true;
           success.classList.add("is-visible");
           success.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
@@ -505,6 +515,16 @@
     });
   }
 
+  /* ---------- Hinweis für die Testversion ---------- */
+  function initTestBanner() {
+    if (!IS_TEST_HOST) return;
+    const bar = document.createElement("div");
+    bar.className = "test-banner";
+    bar.setAttribute("role", "note");
+    bar.innerHTML = "<strong>Testversion</strong> der neuen Webseite von Lüdi Motos · Formulare werden hier nicht verschickt";
+    document.body.prepend(bar);
+  }
+
   /* ---------- Jahr im Footer ---------- */
   function initYear() {
     $$("[data-year]").forEach((el) => (el.textContent = new Date().getFullYear()));
@@ -515,6 +535,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
+    initTestBanner();
     initYear();
     initStatus();
     initHeader();

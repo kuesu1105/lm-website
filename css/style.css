@@ -665,3 +665,7 @@ p { margin: 0 0 1em; }
 .form-error p { margin: 0 0 8px; }
 .form-error a { font-weight: 600; color: #991b1b; text-decoration: underline; }
 .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+
+/* Testversion (nur auf GitHub Pages sichtbar) */
+.test-banner { background: #fff7d6; color: #6b4e00; border-bottom: 1px solid #f1df9a; padding: 8px 16px; text-align: center; font-size: .88rem; }
+.form-success__test { display: inline-block; margin: 0 0 12px; padding: 6px 14px; border-radius: 999px; background: #fff7d6; color: #6b4e00; font-size: .9rem; font-weight: 600; }

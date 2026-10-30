@@ -196,3 +196,15 @@ Das Skript von motorradhandel.ch zeigt pro Seite nur eine Liste. Die Reiter lade
 | Fahrzeugangebote fehlen | motorradhandel.ch nicht erreichbar | Später erneut prüfen; der Link zu motorradhandel.ch erscheint automatisch |
 
 **Tipp:** Jede Änderung als eigenen Commit auf GitHub ablegen. Dann lässt sich über die Versionsgeschichte jederzeit zum letzten funktionierenden Stand zurückkehren.
+
+## Testversion auf GitHub Pages
+
+Unter `https://kuesu1105.github.io/lm-website/` kann die Webseite zum Testen veröffentlicht werden (Repository öffentlich, dann **Settings → Pages**, Branch `main`, Ordner `/ (root)`).
+
+Auf einer Adresse, die auf `github.io` endet, schaltet die Webseite automatisch in den Testmodus. Auf luedimotos.ch ändert sich dadurch nichts.
+
+- Oben erscheint ein gelber Balken «Testversion … Formulare werden hier nicht verschickt».
+- Formulare zeigen nach dem Absenden die Bestätigung mit dem Zusatz «Testversion: Diese Angaben wurden nicht verschickt». Es wird nichts gesendet, weil GitHub Pages kein PHP ausführt.
+- Die Seiten erhalten den Hinweis «noindex», damit Google die Testadresse nicht aufnimmt.
+
+Zusätzlich verweist jede Seite mit einem canonical-Link auf ihre Adresse unter www.luedimotos.ch (`SITE_URL` in `_quelle/build.py`). So erkennen Suchmaschinen die echte Webseite als Original. Der Testmodus steckt in `js/main.js` (`IS_TEST_HOST`, `initTestBanner`), der noindex-Hinweis im Kopfbereich in `_quelle/build.py`.
