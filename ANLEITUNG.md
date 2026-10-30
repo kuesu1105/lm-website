@@ -150,10 +150,11 @@ Die Webseite hat drei Formulare: Serviceanmeldung (`werkstatt.html`), Anmeldung 
 | --- | --- |
 | Neufahrzeuge | 313 |
 | Occasionen | 312 |
-| Vorführfahrzeuge | 601 |
 | Mietfahrzeuge | 600 |
 
-Die Nummern stehen in `js/main.js` bei `const FZL`, die Händlernummer 706 in `pages/fahrzeuge.html` (`data-ui="706"`). Kann das Angebot nicht geladen werden, erscheint nach einigen Sekunden ein Link zu motorradhandel.ch.
+Die Nummern stehen in `js/main.js` bei `const FZL`, die Händlernummer 706 in `pages/fahrzeuge.html` (`data-ui="706"`). Kann das Angebot nicht geladen werden, erscheint nach rund 10 Sekunden ein Link zu motorradhandel.ch.
+
+Das Skript von motorradhandel.ch zeigt pro Seite nur eine Liste. Die Reiter laden die Fahrzeugseite deshalb mit der gewählten Kategorie neu (`fahrzeuge.html?angebot=neu`, `?angebot=occasionen`, `?angebot=miete`). Diese Adressen kannst du auch direkt verlinken. Einen weiteren Reiter (z. B. Vorführfahrzeuge, Nummer 601) fügst du hinzu, indem du in `js/main.js` bei `FZL` einen Eintrag ergänzt, z. B. `vorfuehr: "601"`, und in `pages/fahrzeuge.html` einen passenden Link `<a href="?angebot=vorfuehr#angebote" data-angebot="vorfuehr">Vorführfahrzeuge</a>`.
 
 **Karte (Kontaktseite):** Google Maps lädt aus Datenschutzgründen erst nach einem Klick auf «Karte laden». Die Kartenadresse steht in `pages/kontakt.html` bei `data-src="…"`, der Link «Route planen» in derselben Datei.
 

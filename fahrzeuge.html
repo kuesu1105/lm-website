@@ -134,14 +134,14 @@
         <div class="section-head reveal">
           <span class="eyebrow">Aktuelle Angebote</span>
           <h2>Fahrzeuge an Lager</h2>
-          <p class="lead">Unser tagesaktueller Fahrzeugbestand: Neufahrzeuge, Occasionen, Vorführfahrzeuge und Mietfahrzeuge.</p>
+          <p class="lead">Unser tagesaktueller Fahrzeugbestand von motorradhandel.ch: Wähle Neufahrzeuge, Occasionen oder Mietfahrzeuge. Ein Klick auf ein Inserat zeigt alle Details und Fotos.</p>
         </div>
-        <div class="filter reveal" role="tablist" aria-label="Angebote">
+        <!-- Das Skript von motorradhandel.ch zeigt nur eine Liste pro Seite. Die Reiter laden die Seite deshalb mit der gewählten Kategorie neu. -->
+        <nav class="filter reveal" aria-label="Angebote">
           <a href="?angebot=neu#angebote" data-angebot="neu">Neufahrzeuge</a>
           <a href="?angebot=occasionen#angebote" data-angebot="occasionen">Occasionen</a>
-          <a href="?angebot=vorfuehr#angebote" data-angebot="vorfuehr">Vorführfahrzeuge</a>
           <a href="?angebot=miete#angebote" data-angebot="miete">Mietfahrzeuge</a>
-        </div>
+        </nav>
         <!-- Inserate von motorradhandel.ch (Händler-Nr. 706) -->
         <div class="widget-box reveal" data-mh-widget data-ui="706">
           <div id="mh-extern-content" class="page">

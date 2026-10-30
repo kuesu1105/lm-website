@@ -188,7 +188,8 @@
   }
 
   /* ---------- Inserate von motorradhandel.ch ---------- */
-  const FZL = { neu: "313", occasionen: "312", vorfuehr: "601", miete: "600" };
+  // Kategorie-Nummern (data-fzl) der Inserate bei motorradhandel.ch, Händler 706
+  const FZL = { neu: "313", occasionen: "312", miete: "600" };
 
   function loadScript(src) {
     return new Promise((resolve, reject) => {
@@ -207,14 +208,15 @@
     const type = FZL[key] ? key : "neu";
     $$("[data-angebot]").forEach((a) => {
       a.classList.toggle("is-active", a.dataset.angebot === type);
-      a.setAttribute("aria-selected", String(a.dataset.angebot === type));
+      if (a.dataset.angebot === type) a.setAttribute("aria-current", "page");
     });
     $(".wrapperJSON", box).dataset.fzl = FZL[type];
     const fallback = $(".widget-box__fallback", box);
-    const showFallback = () => { if (!$(".wrapperJSON", box).children.length) fallback.hidden = false; };
+    // Das Skript hängt sofort ein leeres #app an; erst die geladenen Inserate bringen Text mit
+    const showFallback = () => { if (!$(".wrapperJSON", box).textContent.trim()) fallback.hidden = false; };
     loadScript("https://www.motorradhandel.ch/extern/jquery-min.js")
       .then(() => loadScript("https://www.motorradhandel.ch/extern/remote_inserate.js"))
-      .then(() => setTimeout(showFallback, 6000))
+      .then(() => setTimeout(showFallback, 10000))
       .catch(showFallback);
   }
 
